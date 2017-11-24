@@ -34,7 +34,7 @@ void memCheck(void* thParam);	//checking dumped memory using thread
 
 int main() {
 	SECURITY_ATTRIBUTES saAttr;	//windows default Security attribute
-	bool front = true;			//for change dumped memory name 
+	bool front = true, dumped = false;			//for change dumped memory name 
 	int counter = 0;			//to count how many dumped
 
 	// Set the bInheritHandle flag so pipe handles are inherited. 
@@ -83,7 +83,7 @@ int main() {
 	com.close();
 	WriteToPipe(); //child reads on pipe
 	while (1) {
-		counter++;
+		dumped = false;
 		char mainCommand = 0;
 		cout << "Command Input: (c:continue d:dump  s:attack and dump p:pause q: quit" << endl << "> ";
 		cin >> mainCommand;
@@ -117,6 +117,8 @@ int main() {
 					<< "c" << endl;
 				front = true;
 			}
+			counter++;
+			dumped = true;
 			break;
 		case 'S':
 		case 's':
@@ -144,6 +146,8 @@ int main() {
 					<< "c" << endl;
 				front = true;
 			}
+			dumped = true;
+			counter++;
 			break;
 		case 'P':
 		case 'p':
@@ -160,7 +164,7 @@ int main() {
 		}
 		com.close();
 		WriteToPipe(); //child reads on pipe
-		if (counter >= 2) {
+		if (counter >= 2 && dumped) {
 			string path1;
 			string path2;
 			if (front == false) {
