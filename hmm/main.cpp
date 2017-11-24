@@ -183,6 +183,13 @@ int main() {
 				Error[i] = false;
 				fin[i].open(path1, ios::binary);
 				fin[i + THREADNUM].open(path2, ios::binary);
+				if (!fin[i] || !fin[i + THREADNUM]) {
+					Error[THREADNUM] = false;
+					break;
+				}
+				else {
+					Error[THREADNUM] = true;
+				}
 				path1[15]++;
 				path2[15]++;
 				tParam[i] = new tagTREADPARAMS;
@@ -192,26 +199,31 @@ int main() {
 				tParam[i]->filenum = new int(i);
 				hThread[i] = (HANDLE)_beginthread(memCheck, 0, (void*)tParam[i]);
 			}
-			DWORD tEnd[THREADNUM];
-			for (int i = 0; i < THREADNUM; i++) {
-				if (GetExitCodeThread(hThread[i], &tEnd[i]) == STILL_ACTIVE) {
-					i--;
-				}
-				else {
-					if (Error[i] == true) {
-						ofstream fout("./log/error.log", ios::app);
-						CTime time = GetCurrentTime();
-						CString tStr = time.Format(_T("%Y-%m-%d-%H-%M-%S"));
-						fout << tStr;
-						if (front == true) {
-							fout << " ./dump/memory." << i << 0 << endl;
+			if (Error[THREADNUM] == true) {
+				DWORD tEnd[THREADNUM];
+				for (int i = 0; i < THREADNUM; i++) {
+					if (GetExitCodeThread(hThread[i], &tEnd[i]) == STILL_ACTIVE) {
+						i--;
+					}
+					else {
+						if (Error[i] == true) {
+							ofstream fout("./log/error.log", ios::app);
+							CTime time = GetCurrentTime();
+							CString tStr = time.Format(_T("%Y-%m-%d-%H-%M-%S"));
+							fout << tStr;
+							if (front == true) {
+								fout << " ./dump/memory." << i << 0 << endl;
+							}
+							else {
+								fout << "./dump/memory." << i << endl;
+							}
+							fout.close();
 						}
-						else {
-							fout << "./dump/memory." << i << endl;
-						}
-						fout.close();
 					}
 				}
+			}
+			else {
+				cout << "memory dump fail!!" << endl;
 			}
 		}
 	}
