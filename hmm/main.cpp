@@ -168,8 +168,8 @@ int main() {
 				path2 = "./dump/memory.00";
 			}
 			else {
-				char path1[] = "./dump/memory.00";
-				char path2[] = "./dump/memory.0";
+				path1 = "./dump/memory.00";
+				path2 = "./dump/memory.0";
 			}
 			ifstream fin[THREADNUM * 2];
 			bool Error[THREADNUM];
