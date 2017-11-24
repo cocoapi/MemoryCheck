@@ -62,7 +62,7 @@ int main() {
 		FILE_SHARE_WRITE | FILE_SHARE_READ,
 		NULL,
 		OPEN_ALWAYS,
-		FILE_ATTRIBUTE_READONLY,
+		FILE_ATTRIBUTE_READONLY | FILE_FLAG_OVERLAPPED,
 		NULL);
 
 	// Write to the pipe that is the standard input for a child process. 
@@ -72,7 +72,7 @@ int main() {
 	ZeroMemory(ipport, 50);
 	cout << "input remote ip and port: (<IPADDR>:<PORT>)" << endl << "> ";
 	cin >> ipport;
-	ofstream com("command.txt", ios::trunc);
+	ofstream com("command.txt", ios::app);
 	com << "target remote ";
 	if (ipport[0] != ':' && strlen(ipport) < 6) {
 		com << ':' << ipport;
@@ -87,7 +87,7 @@ int main() {
 		char mainCommand = 0;
 		cout << "Command Input: (c:continue d:dump  s:attack and dump p:pause q: quit" << endl << "> ";
 		cin >> mainCommand;
-		ofstream com("command.txt", ios::trunc);
+		ofstream com("command.txt", ios::app);
 		switch (mainCommand) {
 		case 'c':
 		case 'C':
