@@ -74,7 +74,7 @@ int main() {
 	ZeroMemory(ipport, 50);
 	cout << "input remote ip and port: (<IPADDR>:<PORT>)" << endl << "> ";
 	cin >> ipport;
-	ofstream com("command.txt", ios::app);
+	com.open("command.txt", ios::app);
 	com << "target remote ";
 	if (ipport[0] != ':' && strlen(ipport) < 6) {
 		com << ':' << ipport;
