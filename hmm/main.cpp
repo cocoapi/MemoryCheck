@@ -177,6 +177,7 @@ int main() {
 			}
 			ifstream fin[THREADNUM * 2];
 			bool Error[THREADNUM];
+			bool fileCheck = false;
 			tagTREADPARAMS *tParam[THREADNUM];
 			HANDLE hThread[6];
 			for (int i = 0; i < THREADNUM; i++) {
@@ -184,11 +185,11 @@ int main() {
 				fin[i].open(path1, ios::binary);
 				fin[i + THREADNUM].open(path2, ios::binary);
 				if (!fin[i] || !fin[i + THREADNUM]) {
-					Error[THREADNUM] = false;
+					fileCheck = false;
 					break;
 				}
 				else {
-					Error[THREADNUM] = true;
+					fileCheck = true;
 				}
 				path1[15]++;
 				path2[15]++;
@@ -199,7 +200,7 @@ int main() {
 				tParam[i]->filenum = new int(i);
 				hThread[i] = (HANDLE)_beginthread(memCheck, 0, (void*)tParam[i]);
 			}
-			if (Error[THREADNUM] == true) {
+			if (fileCheck == true) {
 				DWORD tEnd[THREADNUM];
 				for (int i = 0; i < THREADNUM; i++) {
 					if (GetExitCodeThread(hThread[i], &tEnd[i]) == STILL_ACTIVE) {
