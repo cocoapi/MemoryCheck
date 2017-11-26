@@ -203,7 +203,8 @@ int main() {
 			if (fileCheck == true) {
 				DWORD tEnd[THREADNUM];
 				for (int i = 0; i < THREADNUM; i++) {
-					if (GetExitCodeThread(hThread[i], &tEnd[i]) == STILL_ACTIVE) {
+					GetExitCodeThread(hThread[i], &tEnd[i]);
+					if (tEnd[i] == STILL_ACTIVE) {
 						i--;
 					}
 					else {
@@ -274,7 +275,7 @@ void CreateChildProcess()
 		// Close handles to the child process and its primary thread.
 		// Some applications might keep these handles to monitor the status
 		// of the child process, for example. 
-
+		cout << "PID: " << piProcInfo.dwProcessId << "executed." << endl;
 		CloseHandle(piProcInfo.hProcess);
 		CloseHandle(piProcInfo.hThread);
 	}
@@ -300,8 +301,6 @@ void WriteToPipe(void)
 		bSuccess = WriteFile(g_hChildStd_IN_Wr, chBuf, dwRead, &dwWritten, NULL);
 		if (!bSuccess) break;
 	}
-
-	// Close the pipe handle so the child process stops reading. 
 }
 
 void ErrorExit(PTSTR lpszFunction)
@@ -351,7 +350,6 @@ void memCheck(void *thParam) {
 		char *buffer2 = new char[length];
 
 		bitset<8> x, y;
-		std::cout << "Reading " << length << " characters... ";
 		// read data as a block:
 		fin1->read(buffer, length);
 		fin2->read(buffer2, length);
