@@ -62,7 +62,7 @@ int main() {
 		FILE_SHARE_WRITE | FILE_SHARE_READ,
 		NULL,
 		OPEN_ALWAYS,
-		FILE_ATTRIBUTE_READONLY | FILE_FLAG_OVERLAPPED,
+		FILE_ATTRIBUTE_READONLY,
 		NULL);
 
 	// Write to the pipe that is the standard input for a child process. 
