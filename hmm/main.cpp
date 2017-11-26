@@ -33,6 +33,8 @@ void ErrorExit(PTSTR);
 void memCheck(void* thParam);	//checking dumped memory using thread
 
 int main() {
+	ofstream com("command.txt", ios::trunc);
+	com.close();
 	SECURITY_ATTRIBUTES saAttr;	//windows default Security attribute
 	bool front = true, dumped = false;			//for change dumped memory name 
 	int counter = 0;			//to count how many dumped
