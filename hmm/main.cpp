@@ -74,7 +74,7 @@ int main() {
 	ZeroMemory(ipport, 50);
 	cout << "input remote ip and port: (<IPADDR>:<PORT>)" << endl << "> ";
 	cin >> ipport;
-	com.open("command.txt", ios::app);
+	com.open("command.txt", ios::end);
 	com << "target remote ";
 	if (ipport[0] != ':' && strlen(ipport) < 6) {
 		com << ':' << ipport;
@@ -89,7 +89,7 @@ int main() {
 		char mainCommand = 0;
 		cout << "Command Input: (c:continue d:dump  s:attack and dump p:pause q: quit" << endl << "> ";
 		cin >> mainCommand;
-		ofstream com("command.txt", ios::app);
+		ofstream com("command.txt", ios::end);
 		switch (mainCommand) {
 		case 'c':
 		case 'C':
@@ -127,12 +127,12 @@ int main() {
 			if (front) {
 				com << "^C" << endl
 					<< "set *((int*)0x604a6ad4) = 604110849" << endl
-					<< "dump memory /dump/memory.0 0x60008000 0x60808000" << endl
-					<< "dump memory /dump/memory.1 0x60808000 0x60f08000" << endl
-					<< "dump memory /dump/memory.2 0x60f08000 0x61808000" << endl
-					<< "dump memory /dump/memory.3 0x61808000 0x61f08000" << endl
-					<< "dump memory /dump/memory.4 0x61f08000 0x62808000" << endl
-					<< "dump memory /dump/memory.5 0x62808000 0x62ae2000" << endl
+					<< "dump memory /dump/memory.0 0x60008000 0x60009000" << endl
+					<< "dump memory /dump/memory.1 0x60808000 0x60809000" << endl
+					<< "dump memory /dump/memory.2 0x60f08000 0x60f09000" << endl
+					<< "dump memory /dump/memory.3 0x61808000 0x61809000" << endl
+					<< "dump memory /dump/memory.4 0x61f08000 0x61f09000" << endl
+					<< "dump memory /dump/memory.5 0x6ae08000 0x62ae2000" << endl
 					<< "c" << endl;
 				front = false;
 			}
@@ -223,7 +223,7 @@ int main() {
 				}
 				for (int i = 0; i < THREADNUM; i++) {
 					if (Error[i] == true) {
-						ofstream fout("./log/error.log", ios::app);
+						ofstream fout("./log/error.log", ios::end);
 						CTime time = GetCurrentTime();
 						CString tStr = time.Format(_T("%Y-%m-%d-%H-%M-%S"));
 						fout << tStr;
