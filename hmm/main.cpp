@@ -262,7 +262,7 @@ void CreateChildProcess()
 		szCmdline,     // command line 
 		NULL,          // process security attributes 
 		NULL,          // primary thread security attributes 
-		FALSE,          // handles are inherited 
+		TRUE,          // handles are inherited 
 		CREATE_NO_WINDOW,             // creation flags 
 		NULL,          // use parent's environment 
 		NULL,          // use parent's current directory 
