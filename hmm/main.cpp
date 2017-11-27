@@ -237,7 +237,7 @@ int main() {
 void CreateChildProcess()
 // Create a child process that uses the previously created pipes for STDIN.
 {
-	TCHAR szCmdline[] = TEXT("child");
+	TCHAR szCmdline[] = TEXT("./gdb/gdb6.exe");
 	PROCESS_INFORMATION piProcInfo;
 	STARTUPINFO siStartInfo;
 	BOOL bSuccess = FALSE;
@@ -259,7 +259,7 @@ void CreateChildProcess()
 	// Create the child process. 
 
 	bSuccess = CreateProcess(NULL,
-		_T("./gdb/gdb6.exe"),     // command line 
+		szCmdline,     // command line 
 		NULL,          // process security attributes 
 		NULL,          // primary thread security attributes 
 		TRUE,          // handles are inherited 
