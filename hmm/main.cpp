@@ -205,25 +205,35 @@ int main() {
 			}
 			if (fileCheck == true) {
 				DWORD tEnd[THREADNUM];
-				for (int i = 0; i < THREADNUM; i++) {
-					GetExitCodeThread(hThread[i], &tEnd[i]);
-					if (tEnd[i] == STILL_ACTIVE) {
-						i--;
+				bool endCheck = false;
+				while (!endCheck) {
+					if (tEnd[0] != STILL_ACTIVE &&
+						tEnd[1] != STILL_ACTIVE &&
+						tEnd[2] != STILL_ACTIVE &&
+						tEnd[3] != STILL_ACTIVE &&
+						tEnd[4] != STILL_ACTIVE &&
+						tEnd[5] != STILL_ACTIVE) {
+						endCheck = true;
 					}
 					else {
-						if (Error[i] == true) {
-							ofstream fout("./log/error.log", ios::app);
-							CTime time = GetCurrentTime();
-							CString tStr = time.Format(_T("%Y-%m-%d-%H-%M-%S"));
-							fout << tStr;
-							if (front == true) {
-								fout << " ./dump/memory." << i << 0 << endl;
-							}
-							else {
-								fout << "./dump/memory." << i << endl;
-							}
-							fout.close();
+						for (int i = 0; i < THREADNUM; i++) {
+							GetExitCodeThread(hThread[i], &tEnd[i]);
 						}
+					}
+				}
+				for (int i = 0; i < THREADNUM; i++) {
+					if (Error[i] == true) {
+						ofstream fout("./log/error.log", ios::app);
+						CTime time = GetCurrentTime();
+						CString tStr = time.Format(_T("%Y-%m-%d-%H-%M-%S"));
+						fout << tStr;
+						if (front == true) {
+							fout << " ./dump/memory." << i << 0 << endl;
+						}
+						else {
+							fout << "./dump/memory." << i << endl;
+						}
+						fout.close();
 					}
 				}
 			}
