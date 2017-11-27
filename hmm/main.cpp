@@ -166,6 +166,7 @@ int main() {
 		}
 		com.close();
 		WriteToPipe(); //child reads on pipe
+		Sleep(60000);
 		if (counter >= 2 && dumped) {
 			string path1;
 			string path2;
