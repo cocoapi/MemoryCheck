@@ -166,8 +166,8 @@ int main() {
 		}
 		com.close();
 		WriteToPipe(); //child reads on pipe
-		if (mainCommand != 'c' || mainCommand != 'p' ||
-			mainCommand != 'C' || mainCommand != 'P') {
+		if (mainCommand != 'c' && mainCommand != 'p' &&
+			mainCommand != 'C' && mainCommand != 'P') {
 			Sleep(10000);
 		}
 		if (counter >= 2 && dumped) {
