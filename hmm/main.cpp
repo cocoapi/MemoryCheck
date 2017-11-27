@@ -18,6 +18,7 @@ using namespace std;
 HANDLE g_hChildStd_IN_Rd = NULL;
 HANDLE g_hChildStd_IN_Wr = NULL;
 HANDLE g_hInputFile = NULL;
+PROCESS_INFORMATION g_piProcInfo;
 
 //parameters for thread
 typedef struct tagTREADPARAMS {
@@ -159,6 +160,7 @@ int main() {
 		case 'q':
 			if (!CloseHandle(g_hChildStd_IN_Wr))
 				ErrorExit(TEXT("StdInWr CloseHandle"));
+			TerminateProcess(g_piProcInfo.hProcess, NULL);
 			com.close();
 			return 0;
 		default:
@@ -166,7 +168,10 @@ int main() {
 		}
 		com.close();
 		WriteToPipe(); //child reads on pipe
-		Sleep(10000);
+		if (mainCommand != 'c' && mainCommand != 'p' &&
+			mainCommand != 'C' && mainCommand != 'P') {
+			Sleep(10000);
+		}
 		if (counter >= 2 && dumped) {
 			string path1;
 			string path2;
@@ -242,6 +247,7 @@ int main() {
 			}
 		}
 	}
+	TerminateProcess(g_piProcInfo.hProcess, NULL);
 	return 0;
 }
 	
@@ -289,6 +295,7 @@ void CreateChildProcess()
 		// Some applications might keep these handles to monitor the status
 		// of the child process, for example. 
 		cout << "PID: " << piProcInfo.dwProcessId << "executed." << endl;
+		g_piProcInfo = piProcInfo;
 		CloseHandle(piProcInfo.hProcess);
 		CloseHandle(piProcInfo.hThread);
 	}
