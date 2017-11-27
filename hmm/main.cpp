@@ -166,7 +166,10 @@ int main() {
 		}
 		com.close();
 		WriteToPipe(); //child reads on pipe
-		Sleep(10000);
+		if (mainCommand != 'c' || mainCommand != 'p' ||
+			mainCommand != 'C' || mainCommand != 'P') {
+			Sleep(10000);
+		}
 		if (counter >= 2 && dumped) {
 			string path1;
 			string path2;
