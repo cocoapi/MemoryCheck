@@ -173,7 +173,7 @@ int main() {
 			break;
 		case 'P':
 		case 'p':
-			com << "^C";
+			com << (char)3;
 			break;
 		case 'Q':
 		case 'q':
