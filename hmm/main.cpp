@@ -167,7 +167,7 @@ int main() {
 			break;
 		case 'P':
 		case 'p':
-			GenerateConsoleCtrlEvent(CTRL_C_EVENT, g_piProcInfo.dwProcessId);
+			GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, g_piProcInfo.dwProcessId);
 			break;
 		case 'Q':
 		case 'q':
@@ -293,7 +293,7 @@ void CreateChildProcess()
 		NULL,          // process security attributes 
 		NULL,          // primary thread security attributes 
 		TRUE,          // handles are inherited 
-		CREATE_NO_WINDOW,             // creation flags 
+		CREATE_NO_WINDOW | CREATE_NEW_PROCESS_GROUP,             // creation flags 
 		NULL,          // use parent's environment 
 		NULL,          // use parent's current directory 
 		&siStartInfo,  // STARTUPINFO pointer 
