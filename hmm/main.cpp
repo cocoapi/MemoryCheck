@@ -325,7 +325,7 @@ void WriteToPipe(void)
 	
 	for (;;)
 	{
-		bSuccess = ReadFile(g_hInputFile, chBuf, BUFSIZE, &dwRead, NULL);
+		bSuccess = PeekNamedPipe(g_hInputFile, chBuf, BUFSIZE, &dwRead, &dwWritten, NULL);
 		if (!bSuccess || dwRead == 0) break;
 
 		bSuccess = WriteFile(g_hChildStd_IN_Wr, chBuf, dwRead, &dwWritten, NULL);
