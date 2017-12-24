@@ -109,6 +109,7 @@ int main() {
 		case 'c':
 		case 'C':
 			com << "c" << endl;
+			WriteToPipe(); //child reads on pipe
 			break;
 		case 'D':
 		case 'd':
@@ -134,6 +135,7 @@ int main() {
 			}
 			counter++;
 			dumped = true;
+			WriteToPipe(); //child reads on pipe
 			break;
 		case 'S':
 		case 's':
@@ -161,6 +163,7 @@ int main() {
 			}
 			dumped = true;
 			counter++;
+			WriteToPipe(); //child reads on pipe
 			break;
 		case 'P':
 		case 'p':
@@ -177,7 +180,6 @@ int main() {
 			break;
 		}
 		com.close();
-		WriteToPipe(); //child reads on pipe
 		ReadFromPipe();
 		/*if (mainCommand != 'c' && mainCommand != 'p' &&
 			mainCommand != 'C' && mainCommand != 'P') {
@@ -325,7 +327,7 @@ void WriteToPipe(void)
 	
 	for (;;)
 	{
-		bSuccess = PeekNamedPipe(g_hInputFile, chBuf, BUFSIZE, &dwRead, &dwWritten, NULL);
+		bSuccess = ReadFile(g_hInputFile, chBuf, BUFSIZE, &dwRead, NULL);
 		if (!bSuccess || dwRead == 0) break;
 
 		bSuccess = WriteFile(g_hChildStd_IN_Wr, chBuf, dwRead, &dwWritten, NULL);
