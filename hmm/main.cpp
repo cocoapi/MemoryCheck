@@ -82,15 +82,6 @@ int main() {
 		FILE_ATTRIBUTE_READONLY,
 		NULL);
 
-	g_hOutputFile = CreateFile(
-		"output.txt",
-		GENERIC_READ,
-		FILE_SHARE_WRITE | FILE_SHARE_READ,
-		NULL,
-		OPEN_ALWAYS,
-		FILE_ATTRIBUTE_READONLY,
-		NULL);
-
 	// Write to the pipe that is the standard input for a child process. 
 	// Data is written to the pipe's buffers, so it is not necessary to wait
 	// until the child process is running before writing data.
@@ -173,7 +164,7 @@ int main() {
 			break;
 		case 'P':
 		case 'p':
-			com << (char)3;
+			GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, g_piProcInfo.dwProcessId);
 			break;
 		case 'Q':
 		case 'q':
@@ -352,10 +343,10 @@ void ReadFromPipe(void) {
 	{
 		bSuccess = PeekNamedPipe(g_hChildStd_OUT_Rd, chBuf, BUFSIZE, &dwRead, &dwWritten, NULL);
 		if (!bSuccess || dwRead < 5 || dwRead == NULL) break;		
-		for (DWORD i = 0; i < BUFSIZE - 2; i++) {
+		/*for (DWORD i = 0; i < BUFSIZE - 2; i++) {
 			if (chBuf[i] < 31) return;
 			if (chBuf[i] == ')' && chBuf[i + 1] == ' ') return;
-		}
+		}*/
 	}
 }
 
