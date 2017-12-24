@@ -348,11 +348,11 @@ void ReadFromPipe(void) {
 		if (!bSuccess || dwRead == 0) break;
 		bSuccess = WriteFile(hParentStdOut, chBuf,
 			dwRead, &dwWritten, NULL);
-		for (DWORD i = 0; i < dwRead - 2; i++) {
-			if (chBuf[i] == ')' && chBuf[i + 1] == ' ' && chBuf[i+2] == '\0') return;
-		}
 		if (!bSuccess) break;
-		cout << "Still Reading......" << endl;
+		for (DWORD i = 0; i < BUFSIZE - 2; i++) {
+			if (chBuf[i] == ')' && chBuf[i + 1] == ' ') return;
+		}
+		cout << chBuf[10] << "    Still Reading......" << endl;
 	}
 }
 
