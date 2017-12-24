@@ -346,9 +346,9 @@ void ReadFromPipe(void) {
 	{
 		bSuccess = PeekNamedPipe(g_hChildStd_OUT_Rd, chBuf, BUFSIZE, &dwRead, &dwWritten, NULL);
 		if (!bSuccess || dwRead < 5 || dwRead == NULL) break;
-		ReadFile(NULL, chBuf, BUFSIZE, &dwRead, NULL);		
+		ReadFile(g_hChildStd_OUT_Rd, chBuf, BUFSIZE, &dwRead, NULL);
 
-		bSuccess = WriteFile(hParentStdOut, chBuf, dwRead, &dwWritten, NULL);
+		bSuccess = WriteFile(NULL, chBuf, dwRead, &dwWritten, NULL);
 		if (!bSuccess) break;
 		/*for (DWORD i = 0; i < BUFSIZE - 2; i++) {
 			if (chBuf[i] < 31) return;
