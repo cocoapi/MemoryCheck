@@ -20,7 +20,6 @@ HANDLE g_hChildStd_IN_Wr = NULL;
 HANDLE g_hChildStd_OUT_Rd = NULL;
 HANDLE g_hChildStd_OUT_Wr = NULL;
 HANDLE g_hInputFile = NULL;
-HANDLE g_hOutputFile = NULL;
 
 //Process Info: GDB
 PROCESS_INFORMATION g_piProcInfo;
@@ -284,6 +283,7 @@ void CreateChildProcess()
 	siStartInfo.hStdInput = g_hChildStd_IN_Rd;
 	siStartInfo.hStdOutput = g_hChildStd_OUT_Wr;
 	siStartInfo.hStdError = g_hChildStd_OUT_Wr;
+	siStartInfo.
 	siStartInfo.dwFlags |= STARTF_USESTDHANDLES;
 
 	// Create the child process. 
