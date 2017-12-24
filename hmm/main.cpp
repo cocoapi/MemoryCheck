@@ -350,6 +350,7 @@ void ReadFromPipe(void) {
 		bSuccess = WriteFile(hParentStdOut, chBuf,
 			dwRead, &dwWritten, NULL);
 		if (!bSuccess) break;
+		cout << "Still Reading......" << endl;
 	}
 }
 
