@@ -20,6 +20,7 @@ HANDLE g_hChildStd_IN_Wr = NULL;
 HANDLE g_hChildStd_OUT_Rd = NULL;
 HANDLE g_hChildStd_OUT_Wr = NULL;
 HANDLE g_hInputFile = NULL;
+HANDLE g_hOutputFile = NULL;
 
 //Process Info: GDB
 PROCESS_INFORMATION g_piProcInfo;
@@ -74,6 +75,15 @@ int main() {
 	// This example assumes a plain text file and uses string output to verify data flow. 
 	g_hInputFile = CreateFile(
 		"command.txt",
+		GENERIC_READ,
+		FILE_SHARE_WRITE | FILE_SHARE_READ,
+		NULL,
+		OPEN_ALWAYS,
+		FILE_ATTRIBUTE_READONLY,
+		NULL);
+
+	g_hOutputFile = CreateFile(
+		"output.txt",
 		GENERIC_READ,
 		FILE_SHARE_WRITE | FILE_SHARE_READ,
 		NULL,
@@ -344,11 +354,8 @@ void ReadFromPipe(void) {
 
 	for (;;)
 	{
-		bSuccess = ReadFile(g_hChildStd_OUT_Rd, chBuf, BUFSIZE, &dwRead, NULL);
-		if (!bSuccess || dwRead < 5) break;
-		bSuccess = WriteFile(hParentStdOut, chBuf,
-			dwRead, &dwWritten, NULL);
-		if (!bSuccess) break;
+		bSuccess = PeekNamedPipe(g_hChildStd_OUT_Rd, chBuf, BUFSIZE, &dwRead, &dwWritten, NULL);
+		if (!bSuccess || dwRead < 5 || dwRead == NULL) break;		
 		for (DWORD i = 0; i < BUFSIZE - 2; i++) {
 			if (chBuf[i] < 31) return;
 			if (chBuf[i] == ')' && chBuf[i + 1] == ' ') return;
