@@ -346,9 +346,11 @@ void ReadFromPipe(void) {
 	{
 		bSuccess = ReadFile(g_hChildStd_OUT_Rd, chBuf, BUFSIZE, &dwRead, NULL);
 		if (!bSuccess || dwRead == 0) break;
-		if (chBuf[0] == '(' && chBuf[1] == 'G') break;
 		bSuccess = WriteFile(hParentStdOut, chBuf,
 			dwRead, &dwWritten, NULL);
+		for (DWORD i = 0; i < dwRead - 2; i++) {
+			if (chBuf[i] == ')' && chBuf[i + 1] == ' ' && chBuf[i+2] == '\0') return;
+		}
 		if (!bSuccess) break;
 		cout << "Still Reading......" << endl;
 	}
