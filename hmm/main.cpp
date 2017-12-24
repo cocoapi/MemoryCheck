@@ -283,7 +283,7 @@ void CreateChildProcess()
 	siStartInfo.hStdInput = g_hChildStd_IN_Rd;
 	siStartInfo.hStdOutput = g_hChildStd_OUT_Wr;
 	siStartInfo.hStdError = g_hChildStd_OUT_Wr;
-	siStartInfo.dwFlags |= STARTF_USESTDHANDLES;
+	siStartInfo.dwFlags = STARTF_USESTDHANDLES;
 
 	// Create the child process. 
 
