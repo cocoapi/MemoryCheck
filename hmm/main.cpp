@@ -350,7 +350,7 @@ void ReadFromPipe(void) {
 			dwRead, &dwWritten, NULL);
 		if (!bSuccess) break;
 		for (DWORD i = 0; i < BUFSIZE - 2; i++) {
-			if (chBuf[i] == 2) return;
+			if (chBuf[i] == 2 || chBuf[i] == 3) return;
 			if (chBuf[i] == ')' && chBuf[i + 1] == ' ') return;
 		}
 	}
