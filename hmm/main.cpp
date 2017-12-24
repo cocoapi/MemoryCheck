@@ -167,7 +167,7 @@ int main() {
 			break;
 		case 'P':
 		case 'p':
-			GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, g_piProcInfo.dwProcessId);
+			GenerateConsoleCtrlEvent(CTRL_C_EVENT, g_piProcInfo.dwProcessId);
 			break;
 		case 'Q':
 		case 'q':
@@ -348,13 +348,14 @@ void ReadFromPipe(void) {
 		if (!bSuccess || dwRead < 5 || dwRead == NULL) break;
 		ReadFile(g_hChildStd_OUT_Rd, chBuf, BUFSIZE, &dwRead, NULL);
 
-		bSuccess = WriteFile(NULL, chBuf, dwRead, &dwWritten, NULL);
+		bSuccess = WriteFile(hParentStdOut, chBuf, dwRead, &dwWritten, NULL);
 		if (!bSuccess) break;
 		/*for (DWORD i = 0; i < BUFSIZE - 2; i++) {
 			if (chBuf[i] < 31) return;
 			if (chBuf[i] == ')' && chBuf[i + 1] == ' ') return;
 		}*/
 	}
+	cout << endl;
 }
 
 void ErrorExit(PTSTR lpszFunction)
