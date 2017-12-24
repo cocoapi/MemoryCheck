@@ -122,8 +122,7 @@ int main() {
 		case 'D':
 		case 'd':
 			if (front) {
-				com << "^C" << endl
-					<< "dump memory /dump/memory.0 0x60008000 0x60808000" << endl
+				com << "dump memory /dump/memory.0 0x60008000 0x60808000" << endl
 					<< "dump memory /dump/memory.1 0x60808000 0x60f08000" << endl
 					<< "dump memory /dump/memory.2 0x60f08000 0x61808000" << endl
 					<< "dump memory /dump/memory.3 0x61808000 0x61f08000" << endl
@@ -133,8 +132,7 @@ int main() {
 				front = false;
 			}
 			else {
-				com << "^C" << endl
-					<< "dump memory /dump/memory.00 0x60008000 0x60808000" << endl
+				com << "dump memory /dump/memory.00 0x60008000 0x60808000" << endl
 					<< "dump memory /dump/memory.10 0x60808000 0x60f08000" << endl
 					<< "dump memory /dump/memory.20 0x60f08000 0x61808000" << endl
 					<< "dump memory /dump/memory.30 0x61808000 0x61f08000" << endl
@@ -149,8 +147,7 @@ int main() {
 		case 'S':
 		case 's':
 			if (front) {
-				com << "^C" << endl
-					<< "set *((int*)0x604a6ad4) = 604110849" << endl
+				com << "set *((int*)0x604a6ad4) = 604110849" << endl
 					<< "dump memory /dump/memory.0 0x60008000 0x60009000" << endl
 					<< "dump memory /dump/memory.1 0x60808000 0x60809000" << endl
 					<< "dump memory /dump/memory.2 0x60f08000 0x60f09000" << endl
@@ -161,8 +158,7 @@ int main() {
 				front = false;
 			}
 			else {
-				com << "^C" << endl
-					<< "set *((int*)0x604a6ad4) = 604110849" << endl
+				com << "set *((int*)0x604a6ad4) = 604110849" << endl
 					<< "dump memory /dump/memory.00 0x60008000 0x60808000" << endl
 					<< "dump memory /dump/memory.10 0x60808000 0x60f08000" << endl
 					<< "dump memory /dump/memory.20 0x60f08000 0x61808000" << endl
@@ -177,7 +173,7 @@ int main() {
 			break;
 		case 'P':
 		case 'p':
-			com << "^C" << endl;
+			com << "^C";
 			break;
 		case 'Q':
 		case 'q':
