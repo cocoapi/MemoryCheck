@@ -341,10 +341,13 @@ void ReadFromPipe(void) {
 	BOOL bSuccess = FALSE;
 	HANDLE hParentStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
+
 	for (;;)
 	{
 		bSuccess = PeekNamedPipe(g_hChildStd_OUT_Rd, chBuf, BUFSIZE, &dwRead, &dwWritten, NULL);
 		if (!bSuccess || dwRead < 5 || dwRead == NULL) break;		
+
+		bSuccess = WriteFile(NULL, chBuf, dwRead, &dwWritten, NULL);
 		/*for (DWORD i = 0; i < BUFSIZE - 2; i++) {
 			if (chBuf[i] < 31) return;
 			if (chBuf[i] == ')' && chBuf[i + 1] == ' ') return;
