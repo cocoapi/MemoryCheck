@@ -350,6 +350,7 @@ void ReadFromPipe(void) {
 		bSuccess = WriteFile(hParentStdOut, chBuf,
 			dwRead, &dwWritten, NULL);
 		if (!bSuccess) break;
+		if (chBuf[0] == '(' && chBuf[1] == 'G') break;
 	}
 }
 
