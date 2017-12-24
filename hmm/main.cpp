@@ -17,7 +17,11 @@ using namespace std;
 //handler for child process's STDIN
 HANDLE g_hChildStd_IN_Rd = NULL;
 HANDLE g_hChildStd_IN_Wr = NULL;
+HANDLE g_hChildStd_OUT_Rd = NULL;
+HANDLE g_hChildStd_OUT_Wr = NULL;
 HANDLE g_hInputFile = NULL;
+
+//Process Info: GDB
 PROCESS_INFORMATION g_piProcInfo;
 
 //parameters for thread
@@ -30,6 +34,7 @@ typedef struct tagTREADPARAMS {
 
 void CreateChildProcess(void);	//creating childprocess
 void WriteToPipe(void);			//let child process read commands
+void ReadFromPipe(void);			//let child process read commands
 void ErrorExit(PTSTR);
 void memCheck(void* thParam);	//checking dumped memory using thread
 
@@ -53,6 +58,14 @@ int main() {
 	// Ensure the write handle to the pipe for STDIN is not inherited. 
 	if (!SetHandleInformation(g_hChildStd_IN_Wr, HANDLE_FLAG_INHERIT, 0))	
 		ErrorExit(TEXT("Stdin SetHandleInformation"));
+	
+	// Create a pipe for the child process's STDOUT. 
+	if (!CreatePipe(&g_hChildStd_OUT_Rd, &g_hChildStd_OUT_Wr, &saAttr, 0))
+		ErrorExit(TEXT("StdoutRd CreatePipe"));
+
+	// Ensure the read handle to the pipe for STDOUT is not inherited.
+	if (!SetHandleInformation(g_hChildStd_OUT_Rd, HANDLE_FLAG_INHERIT, 0))
+		ErrorExit(TEXT("Stdout SetHandleInformation"));
 
 	// Create the child process. 
 	CreateChildProcess();
@@ -168,7 +181,8 @@ int main() {
 		}
 		com.close();
 		WriteToPipe(); //child reads on pipe
-		if (mainCommand != 'c' && mainCommand != 'p' &&
+		ReadFromPipe();
+		/*if (mainCommand != 'c' && mainCommand != 'p' &&
 			mainCommand != 'C' && mainCommand != 'P') {
 			Sleep(10000);
 		}
@@ -245,7 +259,7 @@ int main() {
 			else {
 				cout << "memory dump fail!!" << endl;
 			}
-		}
+		}*/
 	}
 	TerminateProcess(g_piProcInfo.hProcess, NULL);
 	return 0;
@@ -269,8 +283,8 @@ void CreateChildProcess()
 	ZeroMemory(&siStartInfo, sizeof(STARTUPINFO));
 	siStartInfo.cb = sizeof(STARTUPINFO);
 	siStartInfo.hStdInput = g_hChildStd_IN_Rd;
-	siStartInfo.hStdOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-	siStartInfo.hStdError = GetStdHandle(STD_ERROR_HANDLE);
+	siStartInfo.hStdOutput = g_hChildStd_OUT_Wr;
+	siStartInfo.hStdError = g_hChildStd_OUT_Wr;
 	siStartInfo.dwFlags |= STARTF_USESTDHANDLES;
 
 	// Create the child process. 
@@ -294,7 +308,6 @@ void CreateChildProcess()
 		// Close handles to the child process and its primary thread.
 		// Some applications might keep these handles to monitor the status
 		// of the child process, for example. 
-		cout << "PID: " << piProcInfo.dwProcessId << "executed." << endl;
 		g_piProcInfo = piProcInfo;
 		CloseHandle(piProcInfo.hProcess);
 		CloseHandle(piProcInfo.hThread);
@@ -319,6 +332,23 @@ void WriteToPipe(void)
 		if (!bSuccess || dwRead == 0) break;
 
 		bSuccess = WriteFile(g_hChildStd_IN_Wr, chBuf, dwRead, &dwWritten, NULL);
+		if (!bSuccess) break;
+	}
+}
+
+void ReadFromPipe(void) {
+	DWORD dwRead, dwWritten;
+	CHAR chBuf[BUFSIZE];
+	BOOL bSuccess = FALSE;
+	HANDLE hParentStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	for (;;)
+	{
+		bSuccess = ReadFile(g_hChildStd_OUT_Rd, chBuf, BUFSIZE, &dwRead, NULL);
+		if (!bSuccess || dwRead == 0) break;
+
+		bSuccess = WriteFile(hParentStdOut, chBuf,
+			dwRead, &dwWritten, NULL);
 		if (!bSuccess) break;
 	}
 }
