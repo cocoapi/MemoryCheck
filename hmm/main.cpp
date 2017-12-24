@@ -346,11 +346,10 @@ void ReadFromPipe(void) {
 	{
 		bSuccess = ReadFile(g_hChildStd_OUT_Rd, chBuf, BUFSIZE, &dwRead, NULL);
 		if (!bSuccess || dwRead == 0) break;
-
+		if (chBuf[0] == '(' && chBuf[1] == 'G') break;
 		bSuccess = WriteFile(hParentStdOut, chBuf,
 			dwRead, &dwWritten, NULL);
 		if (!bSuccess) break;
-		if (chBuf[0] == '(' && chBuf[1] == 'G') break;
 	}
 }
 
